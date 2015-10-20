@@ -2,26 +2,27 @@
     "name": "pcs/php-cms-version-checker",
     "type": "library",
     "description": "Keep track of new releases for different products",
-    "homepage": "https://github.com/pcs/php-cms-version-checker",
+    "homepage": "https://github.com/cpeter/php-cms-version-checker",
     "license": "MIT",
     "authors": [
         {
             "name": "See contributors",
-            "homepage": "https://github.com/pcs/php-cms-version-checker/graphs/contributors"
+            "homepage": "https://github.com/cpeter/php-cms-version-checker/graphs/contributors"
         }
     ],
     "support": {
-        "issues": "https://github.com/pcs/php-cms-version-checker/issues"
+        "issues": "https://github.com/cpeter/php-cms-version-checker/issues"
     },
     "require": {
-        "php": ">=5.3.0"
+        "php": ">=5.3.0",
+        "ext-sqlite3": "*",
+        "ext-curl": "*"
     },
     "require-dev": {
         "pdepend/pdepend": "~1.0",
         "phploc/phploc": "~2.0",
         "phpmd/phpmd": "~1.0",
         "phpunit/phpunit": "~3.0",
-        "scrutinizer/ocular": "~1.0",
         "sebastian/phpcpd": "~2.0"
     },
     "autoload": {

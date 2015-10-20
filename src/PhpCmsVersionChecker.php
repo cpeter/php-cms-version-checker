@@ -13,6 +13,6 @@ class PhpCmsVersionChecker
      */
     public function autoloaded()
     {
-        return true;
+        return   true;
     }
 }
