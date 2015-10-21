@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "PCs\\PhpCmsVersionChecker\\": "src/"
+            "Cpeter\\PhpCmsVersionChecker\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "PCs\\PhpCmsVersionChecker\\Test\\": "test/"
+            "Cpeter\\PhpCmsVersionChecker\\Test\\": "test/"
         }
     }
 }
