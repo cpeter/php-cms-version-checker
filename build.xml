@@ -132,9 +132,10 @@
   </target>
 
   <target name="phpunit" depends="composer" description="Run unit tests with PHPUnit">
-    <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true"/>
-    <arg value="--configuration" />
-    <arg path="${basedir}/build/phpunit.xml" />
+    <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true">
+      <arg value="--configuration"/>
+      <arg path="${basedir}/phpunit.xml"/>
+    </exec>  
   </target>
 
   <target name="box-check" depends="prepare">
