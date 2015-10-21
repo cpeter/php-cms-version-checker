@@ -21,6 +21,6 @@
   ],
   "git-version": "package_version",
   "main": "bin/php-cms-version-checker",
-  "output": "php-cms-version-checker.phar",
+  "output": "build/php-cms-version-checker.phar",
   "stub": true
 }

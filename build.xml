@@ -11,6 +11,10 @@
     <delete dir="${basedir}/vendor"/>
     <delete file="${basedir}/composer.lock"/>
     <delete dir="${basedir}/build/phar"/>
+    <delete dir="${basedir}/build/coverage"/>
+    <delete dir="${basedir}/build/logs"/>
+    <delete dir="${basedir}/build/pdepend"/>
+    <delete dir="${basedir}/build/test"/>
     <delete>
       <fileset dir="${basedir}/build">
         <include name="**/*.phar" />

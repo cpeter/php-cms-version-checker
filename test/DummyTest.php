@@ -1,8 +1,8 @@
 <?php
 
-namespace PCs\PhpCmsVersionChecker\Test;
+namespace Cpeter\PhpCmsVersionChecker\Test;
 
-use PCs\PhpCmsVersionChecker\PhpCmsVersionChecker;
+use Cpeter\PhpCmsVersionChecker\PhpCmsVersionChecker;
 
 class DummyTest extends \PHPUnit_Framework_TestCase
 {
