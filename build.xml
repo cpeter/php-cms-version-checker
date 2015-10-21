@@ -7,7 +7,6 @@
   <target name="build" depends="lint,composer,phpcs,phploc,pdepend,phpmd-ci,phpcpd,phpunit"/>
 
   <target name="clean" description="Cleanup build artifacts">
-    <delete dir="${basedir}/bin"/>
     <delete dir="${basedir}/vendor"/>
     <delete file="${basedir}/composer.lock"/>
     <delete dir="${basedir}/build/phar"/>
