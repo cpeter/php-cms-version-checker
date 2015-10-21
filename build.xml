@@ -165,7 +165,7 @@
     <exec executable="${builddir}/box.phar">
       <arg value="build"/>
       <arg value="-c" />
-      <arg value="${builddir}/box.json"/>
+      <arg value="${basedir}/box.json"/>
     </exec>
     <exec executable="php">
       <arg value="${builddir}/composer.phar"/>
