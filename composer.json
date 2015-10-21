@@ -1,6 +1,6 @@
 {
-    "name": "pcs/php-cms-version-checker",
-    "type": "library",
+    "name": "cpeter/php-cms-version-checker",
+    "type": "project",
     "description": "Keep track of new releases for different products",
     "homepage": "https://github.com/cpeter/php-cms-version-checker",
     "license": "MIT",
