@@ -16,7 +16,5 @@ if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require __DIR__ . '/../../../autoload.php';
 }
 
-use Cpeter\PhpCmsVersionChecker\PhpCmsVersionChecker;
-
-$application = new PhpCmsVersionChecker();
+$application = new Cpeter\PhpCmsVersionChecker\Console\Application();
 $application->run();
