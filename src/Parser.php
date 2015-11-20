@@ -16,10 +16,9 @@ class Parser {
         
         // fetch url and get the version id
         $client = new \GuzzleHttp\Client();
-        $client->setDefaultOption('verify', false);
-        
+
         try {
-            $res = $client->request('GET', $url);
+            $res = $client->get($url, array('verify' => false));
         } catch(RequestException $e){
             $status_code = $e->getCode();
             throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
@@ -31,8 +30,12 @@ class Parser {
         }
         
         $body = $res->getBody();
-        echo $body;
+        $version_found = preg_match($regexp, $body, $match);
         
-        return 1;
+        if ($version_found === 1 && !empty($match[1])) {
+            return $match[1];
+        }
+                
+        return false;
     }
 }

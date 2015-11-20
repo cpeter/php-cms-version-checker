@@ -2,8 +2,10 @@
 
 namespace Cpeter\PhpCmsVersionChecker\Console\Command;
 
+use Cpeter\PhpCmsVersionChecker as PhpCmsVersionChecker;
+
 use Cpeter\PhpCmsVersionChecker\Configuration\Configuration;
-use Cpeter\PhpCmsVersionChecker\Parser;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -12,6 +14,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CompareCommand extends Command {
+    
     protected function configure()
     {
         $this
@@ -29,15 +32,28 @@ class CompareCommand extends Command {
         $config = $input->getOption('config');
         $configuration = $config ? Configuration::fromFile($config) : Configuration::defaults();
         
-        $parser = new Parser();
-        
+        $parser = new PhpCmsVersionChecker\Parser();
+        $storage = PhpCmsVersionChecker\Storage::getConnection($configuration->get("DB"));
+                
         foreach($configuration->get("CMS") as $cms => $cms_options){
-            $version_id = $parser->parse($cms, $cms_options);
-            $output->writeln($version_id);
+            // get version number from the website
+            // $version_id = $parser->parse($cms, $cms_options);
+            $version_id = 1;
+            
+            // get version number stored in local storage
+            $stored_version = $storage->getVersion($cms);
+            
+            // if the two versions are different send out a mail and store the new value in the db
+            if ($version_id != $stored_version){
+                $storage->putVersion($cms, $version_id);
+            }
+            
+            $output->writeln($version_id. ' ' . $stored_version);
         }
         
         $duration = microtime(true) - $startTime;
         $output->writeln('');
         $output->writeln('Time: ' . round($duration, 3) . ' seconds, Memory: ' . round(memory_get_peak_usage() / 1024 / 1024, 3) . ' MB');
     }
+    
 }

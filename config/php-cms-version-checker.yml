@@ -1,8 +1,10 @@
+DB:
+  dsn: sqlite:///../store/store.sqlite3
 CMS:
   PyroCMS:
     version_page: https://codeigniter.pyrocms.com/store/details/pyrocms_professional
-    regexp: /version/
+    regexp: |<th>Latest Version</th>.*?<td>(.*?)</td>|s
   ModX:
     version_page: https://codeigniter.pyrocms.com/store/details/pyrocms_professional
-    regexp: /version/
+    regexp: |<th>Latest Version</th>.*?<td>(.*?)</td>|s
   
