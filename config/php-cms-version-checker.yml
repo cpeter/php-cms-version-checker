@@ -1,5 +1,9 @@
 DB:
-  dsn: sqlite:///../store/store.sqlite3
+  driver: pdo_sqlite
+  path: ../store/store.sqlite3
+Mailer:
+  host: gmail-smtp-in.l.google.com
+  port: 25
 CMS:
   PyroCMS:
     version_page: https://codeigniter.pyrocms.com/store/details/pyrocms_professional

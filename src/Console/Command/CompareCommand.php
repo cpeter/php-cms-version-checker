@@ -13,8 +13,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CompareCommand extends Command {
-    
+class CompareCommand extends Command 
+{
+
     protected function configure()
     {
         $this
@@ -34,21 +35,25 @@ class CompareCommand extends Command {
         
         $parser = new PhpCmsVersionChecker\Parser();
         $storage = PhpCmsVersionChecker\Storage::getConnection($configuration->get("DB"));
+
+        $alert = PhpCmsVersionChecker\Alert::getInstance($configuration->get("Mailer"));
                 
         foreach($configuration->get("CMS") as $cms => $cms_options){
             // get version number from the website
-            // $version_id = $parser->parse($cms, $cms_options);
-            $version_id = 1;
+            $version_id = $parser->parse($cms, $cms_options);
             
             // get version number stored in local storage
             $stored_version = $storage->getVersion($cms);
             
             // if the two versions are different send out a mail and store the new value in the db
-            if ($version_id != $stored_version){
+            if (true || $version_id != $stored_version){
                 $storage->putVersion($cms, $version_id);
+                
+                // send out notification about the version change
+                $alert->send($cms, $version_id);
             }
             
-            $output->writeln($version_id. ' ' . $stored_version);
+            $output->writeln("Version: " . $version_id. ' -> ' . $stored_version);
         }
         
         $duration = microtime(true) - $startTime;

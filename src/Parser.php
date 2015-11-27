@@ -5,8 +5,10 @@ namespace Cpeter\PhpCmsVersionChecker;
 use Cpeter\PhpCmsVersionChecker\Exception\EmptyUrlException;
 use GuzzleHttp\Exception\RequestException;
 
-class Parser {
-    public function parse($cms, $cms_options){
+class Parser 
+{
+    public function parse($cms, $cms_options)
+    {
         $url = $cms_options['version_page'];
         if (empty($url)) {
             throw new EmptyUrlException("URL must be set for '$cms'. We can not parse empty url.");

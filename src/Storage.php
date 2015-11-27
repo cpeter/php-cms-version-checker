@@ -4,40 +4,44 @@ namespace Cpeter\PhpCmsVersionChecker;
 
 
 
-class Storage {
+class Storage 
+{
 
     protected static $instance;
     protected $conn;
     
-    public static function getConnection($config){
+    public static function getConnection($connectionParams)
+    {
         if (self::$instance == null) {
             $db_config = new \Doctrine\DBAL\Configuration();
-            $connectionParams = array(
-                'url' => $config['dsn']
-            );
+            if (isset($connectionParams['path'])) {
+                $connectionParams['path'] = __DIR__ . '/' . $connectionParams['path'];
+            }
 
             self::$instance = new self();
             self::$instance->conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $db_config);
-
-            // Create (connect to) SQLite database in file
-            // $file_db = new PDO('sqlite:../store/store.sqlite3');
-            
         }
 
         return static::$instance;
     }
 
-    public function getVersion($cms){
+    public function getVersion($cms)
+    {
         // Fetch column as scalar value
-        print_r($this->conn);
-        $sth = $this->conn->query("SELECT version FROM versions WHERE name = :name");
+        $sth = $this->conn->prepare("SELECT version FROM versions WHERE name = :name");
         $sth->bindValue(":name", $cms);
+        $sth->execute();
         $version = $sth->fetchColumn();
+
         return $version;
     }
 
-    public function putVersion($cms, $version){
-        print_r($this->conn);
+    public function putVersion($cms, $version)
+    {
+        $sth = $this->conn->prepare("REPLACE  INTO versions (name, version) VALUES (:name, :version)");
+        $sth->bindValue(":name", $cms);
+        $sth->bindValue(":version", $version);
+        $sth->execute();
     }
 
     /**
