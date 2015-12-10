@@ -32,7 +32,6 @@ class Alert
     public function send($cms, $version_id)
     {
 
-        try {
         // Create a message. Here we could use tempaltes if we want to.
         $message = Swift_Message::newInstance('Wonderful Subject')
             ->setFrom(array('john@doe.com' => 'John Doe'))
@@ -41,11 +40,8 @@ class Alert
         ;
 
 
-            // Send the message
-            $numSent = $this->mailer->send($message);
-        }catch(Swift_TransportException $e){
-           $output->writeln("Mail notification was not sent. ". $e->getMessage());
-        }
+        // Send the message
+        $numSent = $this->mailer->send($message);
 
         return $numSent;
     }

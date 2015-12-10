@@ -52,41 +52,37 @@ class Parser
 
         // $regexp = $cms_options['regexp'];
         
-        // fetch url and get the version id
-        $client = new \GuzzleHttp\Client();
+//        // fetch url and get the version id
+//        $client = new \GuzzleHttp\Client();
+//
+//        try {
+//            $res = $client->get($url, array('verify' => true)); // try with false as well
+//        } catch(RequestException $e){
+//            $status_code = $e->getCode();
+//            throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
+//        }
+//
+//        $status_code = $res->getStatusCode();
+//        if ($res->getStatusCode() != 200){
+//            throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
+//        }
+//
+//        $body = $res->getBody();
+$body = "<th>Latest Version</th><td>2.2.5</td>";
 
-        try {
-            $res = $client->get($url, array('verify' => true)); // try with false as well
-        } catch(RequestException $e){
-            $status_code = $e->getCode();
-            throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
-        }
-        
-        $status_code = $res->getStatusCode();
-        if ($res->getStatusCode() != 200){
-            throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
-        }
-        
-        $body = $res->getBody();
-        
         // loop through all parsers and try to get the cms value. 
         // each CMS should have only one parser so once one parser has commited to do the job don't try the other
-        // parsers, they should not match 
+        // parsers, they should not match
+
+        $version_found = false;
         foreach ($this->parsers as $parser) {
-            $processed = $parser->parse($body, $cms_options);
-            if ($processed) {
-                // what we return .. the found value or null.
-                $processed_value = $parser->getValue();
+            // can the parser do anything with this content?
+            if ($parser->isParser($cms_options['parser'])) {
+                $version_found = $parser->parse($body, $cms_options);
                 break;
             }
         }
-        
-        $version_found = preg_match($regexp, $body, $match);
-        
-        if ($version_found === 1 && !empty($match[1])) {
-            return $match[1];
-        }
-                
-        return false;
+
+        return $version_found;
     }
 }

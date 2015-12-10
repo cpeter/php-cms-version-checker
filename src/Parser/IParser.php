@@ -8,5 +8,11 @@ interface IParser {
      * @param $options array
      * @return mixed
      */
-    public function parse($subject, $options);
+    public function parse(&$subject, &$options);
+
+    /**
+     * @param $name string
+     * @return booleans
+     */
+    public function isParser($name);
 }

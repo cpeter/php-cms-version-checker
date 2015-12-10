@@ -6,13 +6,11 @@ use Cpeter\PhpCmsVersionChecker as PhpCmsVersionChecker;
 
 use Cpeter\PhpCmsVersionChecker\Configuration\Configuration;
 
-use foo\bar\Exception;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Swift_TransportException;
 
 class CompareCommand extends Command 
 {
@@ -47,11 +45,16 @@ class CompareCommand extends Command
             $stored_version = $storage->getVersion($cms);
             
             // if the two versions are different send out a mail and store the new value in the db
-            if (true || $version_id != $stored_version){
+            if (true || $version_id != false && $version_id != $stored_version){
                 $storage->putVersion($cms, $version_id);
 
-                // send out notification about the version change
-                $alert->send($cms, $version_id);
+                try{
+                    // send out notification about the version change
+                    $alert->send($cms, $version_id);
+                }catch(Swift_TransportException $e){
+                    $output->writeln("Mail notification was not sent. ". $e->getMessage());
+                }
+
             }
             
             $output->writeln("Version: " . $version_id. ' -> ' . $stored_version);

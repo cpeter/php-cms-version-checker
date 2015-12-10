@@ -2,8 +2,6 @@
 
 namespace Cpeter\PhpCmsVersionChecker;
 
-
-
 class Storage 
 {
 

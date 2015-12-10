@@ -9,7 +9,8 @@ CMS:
   PyroCMS:
     version_page: https://codeigniter.pyrocms.com/store/details/pyrocms_professional
     regexp: |<th>Latest Version</th>.*?<td>(.*?)</td>|s
+    parser: ParserRegexp
   ModX:
     version_page: https://codeigniter.pyrocms.com/store/details/pyrocms_professional
     regexp: |<th>Latest Version</th>.*?<td>(.*?)</td>|s
-  
+    parser: ParserRegexp
