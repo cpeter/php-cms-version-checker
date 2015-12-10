@@ -49,13 +49,9 @@ class CompareCommand extends Command
             // if the two versions are different send out a mail and store the new value in the db
             if (true || $version_id != $stored_version){
                 $storage->putVersion($cms, $version_id);
-                
-                try {
-                    // send out notification about the version change
-                    $alert->send($cms, $version_id);
-                }catch(Exception $e){
-                    $output->writeln("Mail notification was not sent. ". $e->getMessage()); 
-                }
+
+                // send out notification about the version change
+                $alert->send($cms, $version_id);
             }
             
             $output->writeln("Version: " . $version_id. ' -> ' . $stored_version);

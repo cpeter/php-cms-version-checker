@@ -4,7 +4,6 @@ namespace Cpeter\PhpCmsVersionChecker\Parser;
 
 use Cpeter\PhpCmsVersionChecker\Exception\EmptyUrlException;
 use GuzzleHttp\Exception\RequestException;
-use Cpeter\PhpCmsVersionChecker\Parser\Plugins as Plugins;
 
 class Parser
 {
@@ -19,16 +18,24 @@ class Parser
     protected function registerPlugins()
     {
         // get all the parsers
+        $parsers = glob(__DIR__ . '/Plugins/*.php');
+        foreach($parsers as $parser){
+            require_once $parser;
+            $class = basename($parser, '.php');
+            $obj = __NAMESPACE__ . "\\Plugins\\$class";
+            $p_obj = new $obj();
+            $this->attach( $p_obj );
+        }
         
     }
     
     //add observer
-    public function attach(\IParser $parser) {
+    public function attach(IParser $parser) {
         $this->parsers[] = $parser;
     }
 
     //remove observer
-    public function detach(\IParser $parser) {
+    public function detach(IParser $parser) {
 
         $key = array_search($parser,$this->parsers, true);
         if($key){
@@ -42,14 +49,14 @@ class Parser
         if (empty($url)) {
             throw new EmptyUrlException("URL must be set for '$cms'. We can not parse empty url.");
         }
-       
+
         // $regexp = $cms_options['regexp'];
         
         // fetch url and get the version id
         $client = new \GuzzleHttp\Client();
 
         try {
-            $res = $client->get($url, array('verify' => false));
+            $res = $client->get($url, array('verify' => true)); // try with false as well
         } catch(RequestException $e){
             $status_code = $e->getCode();
             throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
@@ -66,7 +73,12 @@ class Parser
         // each CMS should have only one parser so once one parser has commited to do the job don't try the other
         // parsers, they should not match 
         foreach ($this->parsers as $parser) {
-            $value = $parser->parse($body, $cms_options);
+            $processed = $parser->parse($body, $cms_options);
+            if ($processed) {
+                // what we return .. the found value or null.
+                $processed_value = $parser->getValue();
+                break;
+            }
         }
         
         $version_found = preg_match($regexp, $body, $match);
