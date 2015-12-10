@@ -4,6 +4,7 @@ DB:
 Mailer:
   host: gmail-smtp-in.l.google.com
   port: 25
+  to: john@doe.com
 CMS:
   PyroCMS:
     version_page: https://codeigniter.pyrocms.com/store/details/pyrocms_professional

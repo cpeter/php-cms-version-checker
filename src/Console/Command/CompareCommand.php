@@ -6,6 +6,7 @@ use Cpeter\PhpCmsVersionChecker as PhpCmsVersionChecker;
 
 use Cpeter\PhpCmsVersionChecker\Configuration\Configuration;
 
+use foo\bar\Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
@@ -33,7 +34,7 @@ class CompareCommand extends Command
         $config = $input->getOption('config');
         $configuration = $config ? Configuration::fromFile($config) : Configuration::defaults();
         
-        $parser = new PhpCmsVersionChecker\Parser();
+        $parser = new PhpCmsVersionChecker\Parser\Parser();
         $storage = PhpCmsVersionChecker\Storage::getConnection($configuration->get("DB"));
 
         $alert = PhpCmsVersionChecker\Alert::getInstance($configuration->get("Mailer"));
@@ -49,8 +50,12 @@ class CompareCommand extends Command
             if (true || $version_id != $stored_version){
                 $storage->putVersion($cms, $version_id);
                 
-                // send out notification about the version change
-                $alert->send($cms, $version_id);
+                try {
+                    // send out notification about the version change
+                    $alert->send($cms, $version_id);
+                }catch(Exception $e){
+                    $output->writeln("Mail notification was not sent. ". $e->getMessage()); 
+                }
             }
             
             $output->writeln("Version: " . $version_id. ' -> ' . $stored_version);
