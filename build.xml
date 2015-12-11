@@ -131,7 +131,7 @@
     </exec>
   </target>
 
-  <target name="phpunit" description="Run unit tests with PHPUnit">
+  <target name="phpunit" depends="composer" description="Run unit tests with PHPUnit">
     <exec executable="${basedir}/vendor/bin/phpunit.bat" failonerror="true">
       <arg value="--configuration"/>
       <arg path="${basedir}/phpunit.xml"/>
