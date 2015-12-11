@@ -11,13 +11,12 @@ class Storage
     public static function getConnection($connectionParams)
     {
         if (self::$instance == null) {
-            $db_config = new \Doctrine\DBAL\Configuration();
             if (isset($connectionParams['path'])) {
                 $connectionParams['path'] = __DIR__ . '/' . $connectionParams['path'];
             }
 
             self::$instance = new self();
-            self::$instance->conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $db_config);
+            self::$instance->conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams);
         }
 
         return static::$instance;
