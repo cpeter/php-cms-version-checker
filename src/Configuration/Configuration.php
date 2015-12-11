@@ -48,7 +48,7 @@ class Configuration
     public static function defaults()
     {
         $configPath = __DIR__ . "/../../config/";
-        return self::fromFile(['?'. $configPath . 'php-cms-version-checker.yml.dist', '?'. $configPath . 'php-cms-version-checker.yml']);
+        return self::fromFile(['?'. $configPath . 'php-cms-version-checker.dist.yml', '?'. $configPath . 'php-cms-version-checker.yml']);
     }
     
 }
