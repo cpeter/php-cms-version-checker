@@ -5,3 +5,4 @@ if (!file_exists($autoloadFile)) {
     throw new RuntimeException('Install dependencies to run phpunit.');
 }
 require_once $autoloadFile;
+require __DIR__.'/PhpCmsVersionChecker/TestCase.php';

@@ -7,7 +7,6 @@
   <target name="build" depends="lint,composer,phpcs,phploc,pdepend,phpmd-ci,phpcpd,phpunit"/>
 
   <target name="clean" description="Cleanup build artifacts">
-    <delete dir="${basedir}/bin"/>
     <delete dir="${basedir}/vendor"/>
     <delete file="${basedir}/composer.lock"/>
     <delete dir="${basedir}/build/phar"/>
@@ -133,9 +132,10 @@
   </target>
 
   <target name="phpunit" depends="composer" description="Run unit tests with PHPUnit">
-    <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true"/>
-    <arg value="--configuration" />
-    <arg path="${basedir}/build/phpunit.xml" />
+    <exec executable="${basedir}/vendor/bin/phpunit" failonerror="true">
+      <arg value="--configuration"/>
+      <arg path="${basedir}/phpunit.xml"/>
+    </exec>  
   </target>
 
   <target name="box-check" depends="prepare">
