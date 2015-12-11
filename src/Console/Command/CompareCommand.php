@@ -21,7 +21,7 @@ class CompareCommand extends Command
             ->setName('compare')
             ->setDescription('Compare a set of CMS versions to determine if alert should be sent')
             ->setDefinition([
-                new InputOption('config', null, InputOption::VALUE_REQUIRED, 'A configuration file to configure php-semver-checker')
+                new InputOption('config', null, InputOption::VALUE_REQUIRED, 'A configuration file to configure php-cms-version-checker')
             ]);
     }
 
@@ -31,7 +31,7 @@ class CompareCommand extends Command
 
         $config = $input->getOption('config');
         $configuration = $config ? Configuration::fromFile($config) : Configuration::defaults();
-        
+
         $parser = new PhpCmsVersionChecker\Parser\Parser();
         $storage = PhpCmsVersionChecker\Storage::getConnection($configuration->get("DB"));
 
@@ -40,24 +40,23 @@ class CompareCommand extends Command
         foreach($configuration->get("CMS") as $cms => $cms_options){
             // get version number from the website
             $version_id = $parser->parse($cms, $cms_options);
-            
+
             // get version number stored in local storage
             $stored_version = $storage->getVersion($cms);
             
             // if the two versions are different send out a mail and store the new value in the db
-            if (true || $version_id != false && $version_id != $stored_version){
+            if ($version_id != false && $version_id != $stored_version){
                 $storage->putVersion($cms, $version_id);
 
                 try{
                     // send out notification about the version change
-                    $alert->send($cms, $version_id);
+                    $alert->send($cms, $version_id, $cms_options['url']);
                 }catch(Swift_TransportException $e){
                     $output->writeln("Mail notification was not sent. ". $e->getMessage());
                 }
-
             }
             
-            $output->writeln("Version: " . $version_id. ' -> ' . $stored_version);
+            $output->writeln("$cms Version: " . $version_id. ' -> ' . $stored_version);
         }
         
         $duration = microtime(true) - $startTime;

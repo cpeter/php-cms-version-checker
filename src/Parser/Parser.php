@@ -49,31 +49,27 @@ class Parser
         if (empty($url)) {
             throw new EmptyUrlException("URL must be set for '$cms'. We can not parse empty url.");
         }
-
-        // $regexp = $cms_options['regexp'];
         
-//        // fetch url and get the version id
-//        $client = new \GuzzleHttp\Client();
-//
-//        try {
-//            $res = $client->get($url, array('verify' => true)); // try with false as well
-//        } catch(RequestException $e){
-//            $status_code = $e->getCode();
-//            throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
-//        }
-//
-//        $status_code = $res->getStatusCode();
-//        if ($res->getStatusCode() != 200){
-//            throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
-//        }
-//
-//        $body = $res->getBody();
-$body = "<th>Latest Version</th><td>2.2.5</td>";
+        // fetch url and get the version id
+        $client = new \GuzzleHttp\Client();
+
+        try {
+            $res = $client->get($url, array('verify' => false));
+        } catch(RequestException $e){
+            $status_code = $e->getCode();
+            throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
+        }
+
+        $status_code = $res->getStatusCode();
+        if ($res->getStatusCode() != 200){
+            throw new EmptyUrlException("URL '$url'' returned status code: $status_code. Was expecting 200.");
+        }
+
+        $body = $res->getBody();
 
         // loop through all parsers and try to get the cms value. 
         // each CMS should have only one parser so once one parser has commited to do the job don't try the other
         // parsers, they should not match
-
         $version_found = false;
         foreach ($this->parsers as $parser) {
             // can the parser do anything with this content?
