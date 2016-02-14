@@ -32,7 +32,6 @@ class ConfigurationTest extends TestCase
     {
         $configuration = Configuration::defaults();
         $config = $configuration->get('invalid', 'default');
-        print_r($config);
         $this->assertTrue($config == 'default');
     }
 }
