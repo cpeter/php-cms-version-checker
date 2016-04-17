@@ -68,7 +68,7 @@ class Parser
         $body = $res->getBody();
 
         // loop through all parsers and try to get the cms value. 
-        // each CMS should have only one parser so once one parser has commited to do the job don't try the other
+        // each CMS should have only one parser so once one parser has committed to do the job don't try the other
         // parsers, they should not match
         $version_found = false;
         foreach ($this->parsers as $parser) {
